@@ -1,17 +1,13 @@
-﻿
+﻿using System;
 
 namespace WorkUtil.Entity
 {
+    [Serializable]
     class HotKey
     {
-
-        private int hotKeyID;
-
-        private string sendkeys;
-
-        public int HotKeyID { get => hotKeyID; set => hotKeyID = value; }
-        public string Sendkeys { get => sendkeys; set => sendkeys = value; }
-
-        
+        public int HotKeyID { get; set; }
+        public bool DefaulClick { get; set; }
+        internal InputKey InputKey { get; set; }
+        internal InputKey SendKey { get; set; }
     }
 }
