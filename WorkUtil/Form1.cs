@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WorkUtil.Util;
 
@@ -18,7 +11,8 @@ namespace WorkUtil
         private const int WM_CREATE = 0x1; //窗口消息：创建
         private const int WM_DESTROY = 0x2; //窗口消息：销毁
 
-        private const int HotKeyID = 1; //热键ID（自定义）
+        private const int COPY_KEYID = 1; //热键ID（自定义）
+        private const int PASTE_KEYID = 2; //热键ID（自定义）
 
         public Form1()
         {
@@ -36,22 +30,32 @@ namespace WorkUtil
             base.WndProc(ref msg);
             switch (msg.Msg)
             {
-                case WM_HOTKEY: //窗口消息：热键
-                    int tmpWParam = msg.WParam.ToInt32();
-                    if (tmpWParam == HotKeyID)
+                case WM_HOTKEY:
+                    if (msg.WParam.ToInt32() == COPY_KEYID)
+                    {
+                        System.Windows.Forms.SendKeys.Send("^c");
+                    }
+                    else if (msg.WParam.ToInt32() == PASTE_KEYID)
                     {
                         System.Windows.Forms.SendKeys.Send("^v");
                     }
                     break;
-                case WM_CREATE: //窗口消息：创建
-                    SystemHotKeyUtil.RegHotKey(this.Handle, HotKeyID, SystemHotKeyUtil.KeyModifiers.None, Keys.F1);
+                case WM_CREATE:
+                    SystemHotKeyUtil.RegHotKey(this.Handle, COPY_KEYID, SystemHotKeyUtil.KeyModifiers.None, Keys.F1);
+                    SystemHotKeyUtil.RegHotKey(this.Handle, PASTE_KEYID, SystemHotKeyUtil.KeyModifiers.None, Keys.F2);
                     break;
-                case WM_DESTROY: //窗口消息：销毁
-                    SystemHotKeyUtil.UnregisterHotKey(this.Handle, HotKeyID); //销毁热键
+                case WM_DESTROY:
+                    SystemHotKeyUtil.UnregisterHotKey(this.Handle, COPY_KEYID);
+                    SystemHotKeyUtil.UnregisterHotKey(this.Handle, PASTE_KEYID);
                     break;
                 default:
                     break;
             }
+        }
+
+        private void hotkey()
+        {
+
         }
     }
 }
