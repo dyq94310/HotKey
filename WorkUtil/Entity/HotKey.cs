@@ -7,7 +7,7 @@ namespace WorkUtil.Entity
     {
         public int HotKeyID { get; set; }
         public bool DefaulClick { get; set; }
-        internal InputKey InputKey { get; set; }
+        internal InputKey HotKeys { get; set; }
         internal InputKey SendKey { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace WorkUtil.Util
         /// </summary>
         /// <param name="e"></param>
         /// <param name="inputKey"></param>
-        public void setKey(KeyEventArgs e, InputKey inputKey)
+        public static void setKey(KeyEventArgs e, InputKey inputKey)
         {
             if (e.Modifiers != 0)
             {
@@ -36,8 +36,12 @@ namespace WorkUtil.Util
         /// </summary>
         /// <param name="inputKey"></param>
         /// <returns></returns>
-        public string getDispaly(InputKey inputKey)
+        public static string getDispaly(InputKey inputKey)
         {
+            if (inputKey == null)
+            {
+                return string.Empty;
+            }
             StringBuilder txtShow = new StringBuilder();
             if (inputKey.Modifiers != 0)
             {
@@ -58,8 +62,12 @@ namespace WorkUtil.Util
             return txtShow.ToString();
         }
 
-        public string getSendKey(InputKey inputKey)
+        public static string getSendKey(InputKey inputKey)
         {
+            if (inputKey == null)
+            {
+                return string.Empty;
+            }
             StringBuilder sendKey = new StringBuilder();
 
             switch (inputKey.Modifiers)
@@ -96,8 +104,12 @@ namespace WorkUtil.Util
         /// </summary>
         /// <param name="inputKey"></param>
         /// <returns></returns>
-        public SystemHotKeyUtil.KeyModifiers getKeyModifiersEnum(InputKey inputKey)
+        public static SystemHotKeyUtil.KeyModifiers getKeyModifiersEnum(InputKey inputKey)
         {
+            if (inputKey == null)
+            {
+                return SystemHotKeyUtil.KeyModifiers.None;
+            }
             switch (inputKey.Modifiers)
             {
                 case Keys.Alt:
@@ -107,7 +119,7 @@ namespace WorkUtil.Util
                 case Keys.Shift:
                     return SystemHotKeyUtil.KeyModifiers.Shift;
                 default:
-                    return SystemHotKeyUtil.KeyModifiers.None; ;
+                    return SystemHotKeyUtil.KeyModifiers.None;
             }
         }
     }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using WorkUtil.Entity;
+using WorkUtil.Interface;
 using WorkUtil.Util;
 
 namespace WorkUtil
@@ -36,8 +37,8 @@ namespace WorkUtil
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            FrmInputKey aucInputKey = new FrmInputKey();
-            aucInputKey.Show();
+            IHotKey aucInputKey = new FrmInputKey();
+            HotKey hotKey = aucInputKey.getHotKey(new HotKey());
         }
 
         protected override void WndProc(ref Message msg)

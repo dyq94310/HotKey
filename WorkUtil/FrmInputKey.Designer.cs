@@ -31,7 +31,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.txtSendKeys = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.txtRowKeys = new System.Windows.Forms.TextBox();
+            this.txtHotKeys = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtHotKeyId = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -46,7 +46,7 @@
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.txtSendKeys);
             this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.txtRowKeys);
+            this.panel1.Controls.Add(this.txtHotKeys);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.txtHotKeyId);
             this.panel1.Controls.Add(this.label1);
@@ -75,10 +75,10 @@
             // 
             // txtRowKeys
             // 
-            this.txtRowKeys.Location = new System.Drawing.Point(106, 76);
-            this.txtRowKeys.Name = "txtRowKeys";
-            this.txtRowKeys.Size = new System.Drawing.Size(261, 28);
-            this.txtRowKeys.TabIndex = 3;
+            this.txtHotKeys.Location = new System.Drawing.Point(106, 76);
+            this.txtHotKeys.Name = "txtRowKeys";
+            this.txtHotKeys.Size = new System.Drawing.Size(261, 28);
+            this.txtHotKeys.TabIndex = 3;
             // 
             // label2
             // 
@@ -147,7 +147,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtSendKeys;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtRowKeys;
+        private System.Windows.Forms.TextBox txtHotKeys;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
