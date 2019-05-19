@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using System.Windows.Forms;
 using WorkUtil.Entity;
 using WorkUtil.Interface;
@@ -13,6 +12,17 @@ namespace WorkUtil
         {
             InitializeComponent();
             init();
+        }
+
+        public FrmInputKey(HotKey hotKey)
+        {
+            InitializeComponent();
+            init();
+
+            this.txtHotKeyId.Text = hotKey.HotKeyId.ToString();
+            this.txtHotKeys.Text = hotKey.HotKeys == null ? string.Empty : hotKey.HotKeys.Display;
+            this.txtSendKeys.Text = hotKey.SendKey == null ? string.Empty : hotKey.SendKey.Display;
+            this.txtNote.Text = hotKey.Note;
         }
 
         private void init()
@@ -30,23 +40,26 @@ namespace WorkUtil
                 inputkey.Modifiers = e.Modifiers;
             }
             inputkey.Keys = e.KeyCode;
-            ((Control)sender).Text = KeyUtil.getDispaly(inputkey);
+            inputkey.Display = KeyUtil.getDispaly(inputkey);
+            inputkey.Sends = KeyUtil.getSendKey(inputkey);
+            ((Control)sender).Text = inputkey.Display;
             ((Control)sender).Tag = inputkey;
         }
 
         public HotKey getHotKey(HotKey hotKey)
         {
-            this.txtHotKeyId.Text = hotKey.HotKeyID.ToString();
-            this.txtHotKeys.Text = KeyUtil.getDispaly(hotKey.HotKeys);
-            this.txtSendKeys.Text = KeyUtil.getDispaly(hotKey.SendKey);
-
+            this.txtHotKeyId.Text = hotKey.HotKeyId.ToString();
+            this.txtHotKeys.Text = hotKey.HotKeys == null ? string.Empty : hotKey.HotKeys.Display;
+            this.txtSendKeys.Text = hotKey.SendKey == null ? string.Empty : hotKey.SendKey.Display;
+            this.txtNote.Text = hotKey.Note;
             if (this.ShowDialog() != DialogResult.OK)
             {
                 return hotKey;
             }
-            hotKey.HotKeyID = Convert.ToInt32(this.txtHotKeyId.Text);
-            hotKey.HotKeys = (InputKey)this.txtHotKeys.Tag;
-            hotKey.SendKey = (InputKey)this.txtSendKeys.Tag;
+            hotKey.HotKeyId = Convert.ToInt32(this.txtHotKeyId.Text);
+            hotKey.SendKey = (InputKey)this.txtHotKeys.Tag;
+            hotKey.HotKeys = (InputKey)this.txtSendKeys.Tag;
+            hotKey.Note = this.txtNote.Text;
             return hotKey;
         }
 

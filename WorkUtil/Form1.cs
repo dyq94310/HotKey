@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Common.Utils;
+using Common.Utils.PublicEntity;
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using WorkUtil.Entity;
 using WorkUtil.Interface;
@@ -15,10 +15,11 @@ namespace WorkUtil
         private const int WM_CREATE = 0x1; //窗口消息：创建
         private const int WM_DESTROY = 0x2; //窗口消息：销毁
 
-        private const int COPY_KEYID = 10; //热键ID（自定义）
-        private const int PASTE_KEYID = 20; //热键ID（自定义）
+        private const string SAVE_FILE = "date.dat";
 
-
+        /// <summary>
+        /// 热键集合
+        /// </summary>
         private List<HotKey> list;
 
         public Form1()
@@ -29,16 +30,53 @@ namespace WorkUtil
 
         private void init()
         {
-            this.checkBox1.Checked = true;
-            //list = SerializeUtil<List<HotKey>>.deSerializeNow("date.dat");
-            this.dgv.DataSource = list;
+            try
+            {
+                list = SerializeUtil<List<HotKey>>.deSerializeNow(SAVE_FILE);
+            }
+            catch
+            {
+                list = new List<HotKey>();
+            }
+
+            List<KeyValue> columns = new List<KeyValue>
+            {
+                new KeyValue("HotKeyId", "热键ID"),
+                new KeyValue("Note", "备注")
+            };
+            ControlUtil.setDgvNormal(dgv);
+            ControlUtil.setDgvColumn(dgv, columns);
+            dgv.DataSource = list;
         }
 
 
         private void Button1_Click(object sender, EventArgs e)
         {
+            InsertHotKey();
+        }
+
+        private void InsertHotKey()
+        {
             IHotKey aucInputKey = new FrmInputKey();
             HotKey hotKey = aucInputKey.getHotKey(new HotKey());
+            if (hotKey.HotKeys == null)
+            {
+                return;
+            }
+
+            list.Add(hotKey);
+            this.dgv.DataSource = null;
+            this.dgv.DataSource = list;
+        }
+
+        private void updateHotKey(HotKey hk)
+        {
+            this.dgv.DataSource = null;
+            list.Remove(hk);
+            IHotKey aucInputKey = new FrmInputKey();
+            HotKey hotKey = aucInputKey.getHotKey(hk);
+            list.Add(hotKey);
+            this.dgv.DataSource = list;
         }
 
         protected override void WndProc(ref Message msg)
@@ -47,22 +85,13 @@ namespace WorkUtil
             switch (msg.Msg)
             {
                 case WM_HOTKEY:
-                    if (msg.WParam.ToInt32() == COPY_KEYID)
-                    {
-                        SendKeys.Send("^c");
-                    }
-                    else if (msg.WParam.ToInt32() == PASTE_KEYID)
-                    {
-                        SendKeys.Send("^v");
-                    }
+                    sendKey(msg.WParam.ToInt32());
                     break;
                 case WM_CREATE:
-                    //SystemHotKeyUtil.RegHotKey(this.Handle, COPY_KEYID, SystemHotKeyUtil.KeyModifiers.None, Keys.F1);
-                    //SystemHotKeyUtil.RegHotKey(this.Handle, PASTE_KEYID, SystemHotKeyUtil.KeyModifiers.None, Keys.F2);
+                    //creatHotkey();
                     break;
                 case WM_DESTROY:
-                    SystemHotKeyUtil.UnregisterHotKey(this.Handle, COPY_KEYID);
-                    SystemHotKeyUtil.UnregisterHotKey(this.Handle, PASTE_KEYID);
+                    distory();
                     break;
                 default:
                     break;
@@ -71,25 +100,30 @@ namespace WorkUtil
 
         private void creatHotkey()
         {
-            //if (list.Count < 1)
-            //{
-            //    return;
-            //}
-            //foreach (var item in list)
-            //{
-            //    SystemHotKeyUtil.RegHotKey(this.Handle
-            //        , item.HotKeyID
-            //        , SystemHotKeyUtil.KeyModifiers.None
-            //        , Keys.F1);
-            //}
-            SystemHotKeyUtil.RegHotKey(this.Handle, COPY_KEYID, SystemHotKeyUtil.KeyModifiers.None, Keys.F1);
-            SystemHotKeyUtil.RegHotKey(this.Handle, PASTE_KEYID, SystemHotKeyUtil.KeyModifiers.None, Keys.F3);
+            if (list == null)
+            {
+                return;
+            }
+            foreach (var item in list)
+            {
+                SystemHotKeyUtil.RegHotKey(this.Handle
+                    , item.HotKeyId
+                    , item.HotKeys.Modifiers
+                    , item.HotKeys.Keys);
+            }
         }
 
         private void distory()
         {
-            SystemHotKeyUtil.UnregisterHotKey(this.Handle, COPY_KEYID);
-            SystemHotKeyUtil.UnregisterHotKey(this.Handle, PASTE_KEYID);
+            if (list == null)
+            {
+                return;
+            }
+            foreach (var item in list)
+            {
+                SystemHotKeyUtil.UnregisterHotKey(this.Handle
+                    , item.HotKeyId);
+            }
         }
 
         private void CheckBox1_CheckedChanged(object sender, EventArgs e)
@@ -102,6 +136,51 @@ namespace WorkUtil
             {
                 distory();
             }
+        }
+
+        private void sendKey(int hotkeyId)
+        {
+            if (list == null)
+            {
+                return;
+            }
+            foreach (var item in list)
+            {
+                if (item.HotKeyId == hotkeyId)
+                {
+                    SendKeys.Send(item.SendKey.Sends);
+                    return;
+                }
+            }
+        }
+
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            SerializeUtil<List<HotKey>>.serializeNow(list, SAVE_FILE);
+        }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show("是否确的删除当前热键", "提示", MessageBoxButtons.OKCancel);
+            if (dr == DialogResult.OK)
+            {
+                list.RemoveAt(this.dgv.CurrentRow.Index);
+                this.dgv.DataSource = null;
+                this.dgv.DataSource = list;
+            }
+        }
+
+        private void Dgv_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            HotKey hotKey = list[this.dgv.CurrentRow.Index];
+            updateHotKey(hotKey);
+        }
+
+        private void Dgv_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            HotKey hotKey = list[this.dgv.CurrentRow.Index];
+            FrmInputKey frmInputKey = new FrmInputKey(hotKey);
+            frmInputKey.Show();
         }
     }
 }

@@ -38,6 +38,30 @@ namespace WorkUtil.Util
         public enum KeyModifiers { None = 0, Alt = 1, Ctrl = 2, Shift = 4, WindowsKey = 8 }
 
 
+            public static void RegHotKey(IntPtr hwnd, int hotKeyId, Keys keyModifiers, Keys key)
+        {
+            KeyModifiers modifiers;
+            switch (keyModifiers)
+            {
+                case Keys.None:
+                    modifiers = KeyModifiers.None;
+                    break;
+                case Keys.Alt:
+                    modifiers = KeyModifiers.Alt;
+                    break;
+                case Keys.Control:
+                    modifiers = KeyModifiers.Ctrl;
+                    break;
+                case Keys.Shift:
+                    modifiers = KeyModifiers.Shift;
+                    break;
+                default:
+                    modifiers = KeyModifiers.None;
+                    break;
+            }
+            RegHotKey(hwnd, hotKeyId, modifiers, key);
+        }
+
         /// <summary>
         /// 注册热键
         /// </summary>
@@ -51,7 +75,14 @@ namespace WorkUtil.Util
             {
                 int errorCode = Marshal.GetLastWin32Error();
 
-                MessageBox.Show((errorCode == 1409) ? "热键被占用 ！" : "注册热键失败！错误代码：" + errorCode);
+                if (errorCode == 1409)
+                {
+                    MessageBox.Show("热键被占用 ！ hotKey =" + hotKeyId);
+                }
+                else
+                {
+                    MessageBox.Show("注册热键失败！错误代码：" + errorCode);
+                }
             }
         }
     }
