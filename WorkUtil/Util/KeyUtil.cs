@@ -51,7 +51,8 @@ namespace WorkUtil.Util
 
             if ((keyCode >= 33 && keyCode <= 40)
                 || (keyCode >= 65 && keyCode <= 90)
-                || (keyCode >= 112 && keyCode <= 123))
+                || (keyCode >= 112 && keyCode <= 123)
+                || keyCode == 8)
             {
                 txtShow.Append(inputKey.Keys.ToString());
             }
@@ -85,7 +86,10 @@ namespace WorkUtil.Util
                     break;
             }
             int keyCode = (int)inputKey.Keys;
-
+            if (keyCode == 8)
+            {
+                sendKey.Append(KeyCodeCst.BACKSPACE);
+            }
             if ((keyCode >= 33 && keyCode <= 40)
                 || (keyCode >= 65 && keyCode <= 90)
                 || (keyCode >= 112 && keyCode <= 123))

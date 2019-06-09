@@ -50,15 +50,23 @@ namespace WorkUtil
         {
             this.txtHotKeyId.Text = hotKey.HotKeyId.ToString();
             this.txtHotKeys.Text = hotKey.HotKeys == null ? string.Empty : hotKey.HotKeys.Display;
+            this.txtHotKeys.Tag = hotKey.HotKeys;
             this.txtSendKeys.Text = hotKey.SendKey == null ? string.Empty : hotKey.SendKey.Display;
+            this.txtSendKeys.Tag = hotKey.SendKey;
             this.txtNote.Text = hotKey.Note;
             if (this.ShowDialog() != DialogResult.OK)
             {
                 return hotKey;
             }
             hotKey.HotKeyId = Convert.ToInt32(this.txtHotKeyId.Text);
-            hotKey.SendKey = (InputKey)this.txtHotKeys.Tag;
-            hotKey.HotKeys = (InputKey)this.txtSendKeys.Tag;
+            if (this.txtHotKeys.Tag!=null)
+            {
+                hotKey.SendKey = (InputKey)this.txtHotKeys.Tag;
+            }
+            if (this.txtSendKeys.Tag!=null)
+            {
+                hotKey.HotKeys = (InputKey)this.txtSendKeys.Tag;
+            }
             hotKey.Note = this.txtNote.Text;
             return hotKey;
         }
@@ -66,11 +74,13 @@ namespace WorkUtil
         private void Button1_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
+            this.Close();
         }
 
         private void Button2_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
+            this.Close();
         }
     }
 }

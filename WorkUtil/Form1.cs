@@ -58,7 +58,9 @@ namespace WorkUtil
         private void InsertHotKey()
         {
             IHotKey aucInputKey = new FrmInputKey();
-            HotKey hotKey = aucInputKey.getHotKey(new HotKey());
+            HotKey cmd = new HotKey();
+            cmd.HotKeyId = new Random().Next();
+            HotKey hotKey = aucInputKey.getHotKey(cmd);
             if (hotKey.HotKeys == null)
             {
                 return;
@@ -156,7 +158,15 @@ namespace WorkUtil
 
         private void Button2_Click(object sender, EventArgs e)
         {
-            SerializeUtil<List<HotKey>>.serializeNow(list, SAVE_FILE);
+            try
+            {
+                SerializeUtil<List<HotKey>>.serializeNow(list, SAVE_FILE);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("保存失败" + ex);
+            }
+            MessageBox.Show("保存成功");
         }
 
         private void Button3_Click(object sender, EventArgs e)
@@ -179,8 +189,7 @@ namespace WorkUtil
         private void Dgv_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             HotKey hotKey = list[this.dgv.CurrentRow.Index];
-            FrmInputKey frmInputKey = new FrmInputKey(hotKey);
-            frmInputKey.Show();
+            updateHotKey(hotKey);
         }
     }
 }
