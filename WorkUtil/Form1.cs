@@ -1,5 +1,6 @@
 ﻿using Common.Utils;
 using Common.Utils.PublicEntity;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -17,6 +18,8 @@ namespace WorkUtil
 
         private const string SAVE_FILE = "date.dat";
 
+        public static readonly ILog loginfo = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         /// <summary>
         /// 热键集合
         /// </summary>
@@ -26,6 +29,7 @@ namespace WorkUtil
         {
             InitializeComponent();
             init();
+            loginfo.Info("启动成功");
         }
 
         private void init()
@@ -57,28 +61,31 @@ namespace WorkUtil
 
         private void InsertHotKey()
         {
+
+            this.dgv.DataSource = null;
+
             IHotKey aucInputKey = new FrmInputKey();
             HotKey cmd = new HotKey();
             cmd.HotKeyId = new Random().Next();
             HotKey hotKey = aucInputKey.getHotKey(cmd);
-            if (hotKey.HotKeys == null)
+            if (hotKey.RegKeys == null)
             {
                 return;
             }
 
             list.Add(hotKey);
-            this.dgv.DataSource = null;
             this.dgv.DataSource = list;
         }
 
         private void updateHotKey(HotKey hk)
         {
-            this.dgv.DataSource = null;
-            list.Remove(hk);
+            if (!list.Contains(hk))
+            {
+                MessageBox.Show("选择出错，请重启应用");
+                return;
+            }
             IHotKey aucInputKey = new FrmInputKey();
-            HotKey hotKey = aucInputKey.getHotKey(hk);
-            list.Add(hotKey);
-            this.dgv.DataSource = list;
+            aucInputKey.getHotKey(hk);
         }
 
         protected override void WndProc(ref Message msg)
@@ -87,7 +94,7 @@ namespace WorkUtil
             switch (msg.Msg)
             {
                 case WM_HOTKEY:
-                    sendKey(msg.WParam.ToInt32());
+                    mapping(msg.WParam.ToInt32());
                     break;
                 case WM_CREATE:
                     //creatHotkey();
@@ -110,8 +117,14 @@ namespace WorkUtil
             {
                 SystemHotKeyUtil.RegHotKey(this.Handle
                     , item.HotKeyId
-                    , item.HotKeys.Modifiers
-                    , item.HotKeys.Keys);
+                    , item.RegKeys.Modifiers
+                    , item.RegKeys.Keys);
+
+                loginfo.Info
+                    (string.Format("RegHotKey，id={0},hotKey={1},note={2}"
+                    , item.HotKeyId
+                    , item.RegKeys.Display
+                    , item.Note));
             }
         }
 
@@ -125,6 +138,7 @@ namespace WorkUtil
             {
                 SystemHotKeyUtil.UnregisterHotKey(this.Handle
                     , item.HotKeyId);
+                loginfo.Info(string.Format("UnregisterHotKey，id={0},note={1}", item.HotKeyId, item.Note));
             }
         }
 
@@ -140,7 +154,7 @@ namespace WorkUtil
             }
         }
 
-        private void sendKey(int hotkeyId)
+        private void mapping(int hotkeyId)
         {
             if (list == null)
             {
@@ -150,10 +164,12 @@ namespace WorkUtil
             {
                 if (item.HotKeyId == hotkeyId)
                 {
-                    SendKeys.Send(item.SendKey.Sends);
+                    SendKeys.Send(item.SendKeys.Sends);
+                    loginfo.Info(string.Format("success:ID={0},note={1}", hotkeyId, item.Note));
                     return;
                 }
             }
+            loginfo.Info(string.Format("ID not find,ID={0}", hotkeyId));
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -164,9 +180,11 @@ namespace WorkUtil
             }
             catch (Exception ex)
             {
+                loginfo.Info("save fail");
                 MessageBox.Show("保存失败" + ex);
             }
             MessageBox.Show("保存成功");
+            loginfo.Info("save success");
         }
 
         private void Button3_Click(object sender, EventArgs e)

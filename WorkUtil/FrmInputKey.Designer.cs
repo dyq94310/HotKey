@@ -35,7 +35,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.txtSendKeys = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.txtHotKeys = new System.Windows.Forms.TextBox();
+            this.txtRegKeys = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtHotKeyId = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -50,7 +50,7 @@
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.txtSendKeys);
             this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.txtHotKeys);
+            this.panel1.Controls.Add(this.txtRegKeys);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.txtHotKeyId);
             this.panel1.Controls.Add(this.label1);
@@ -113,12 +113,12 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "映射为";
             // 
-            // txtHotKeys
+            // txtRegKeys
             // 
-            this.txtHotKeys.Location = new System.Drawing.Point(106, 76);
-            this.txtHotKeys.Name = "txtHotKeys";
-            this.txtHotKeys.Size = new System.Drawing.Size(261, 28);
-            this.txtHotKeys.TabIndex = 3;
+            this.txtRegKeys.Location = new System.Drawing.Point(106, 76);
+            this.txtRegKeys.Name = "txtRegKeys";
+            this.txtRegKeys.Size = new System.Drawing.Size(261, 28);
+            this.txtRegKeys.TabIndex = 3;
             // 
             // label2
             // 
@@ -167,7 +167,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtSendKeys;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtHotKeys;
+        private System.Windows.Forms.TextBox txtRegKeys;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;

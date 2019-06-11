@@ -20,15 +20,16 @@ namespace WorkUtil
             init();
 
             this.txtHotKeyId.Text = hotKey.HotKeyId.ToString();
-            this.txtHotKeys.Text = hotKey.HotKeys == null ? string.Empty : hotKey.HotKeys.Display;
-            this.txtSendKeys.Text = hotKey.SendKey == null ? string.Empty : hotKey.SendKey.Display;
+            this.txtRegKeys.Text = hotKey.RegKeys == null ? string.Empty : hotKey.RegKeys.Display;
+            this.txtSendKeys.Text = hotKey.SendKeys == null ? string.Empty : hotKey.SendKeys.Display;
+           
             this.txtNote.Text = hotKey.Note;
         }
 
         private void init()
         {
             this.Text = "编辑或添加";
-            this.txtHotKeys.KeyDown += TxtKeys_KeyDown;
+            this.txtRegKeys.KeyDown += TxtKeys_KeyDown;
             this.txtSendKeys.KeyDown += TxtKeys_KeyDown;
         }
 
@@ -49,23 +50,28 @@ namespace WorkUtil
         public HotKey getHotKey(HotKey hotKey)
         {
             this.txtHotKeyId.Text = hotKey.HotKeyId.ToString();
-            this.txtHotKeys.Text = hotKey.HotKeys == null ? string.Empty : hotKey.HotKeys.Display;
-            this.txtHotKeys.Tag = hotKey.HotKeys;
-            this.txtSendKeys.Text = hotKey.SendKey == null ? string.Empty : hotKey.SendKey.Display;
-            this.txtSendKeys.Tag = hotKey.SendKey;
+
+            this.txtRegKeys.Text = hotKey.RegKeys == null ? string.Empty : hotKey.RegKeys.Display;
+            this.txtRegKeys.Tag = hotKey.RegKeys;
+
+            this.txtSendKeys.Text = hotKey.SendKeys == null ? string.Empty : hotKey.SendKeys.Display;
+            this.txtSendKeys.Tag = hotKey.SendKeys;
+
+
             this.txtNote.Text = hotKey.Note;
+
             if (this.ShowDialog() != DialogResult.OK)
             {
                 return hotKey;
             }
             hotKey.HotKeyId = Convert.ToInt32(this.txtHotKeyId.Text);
-            if (this.txtHotKeys.Tag!=null)
+            if (this.txtRegKeys.Tag != null)
             {
-                hotKey.SendKey = (InputKey)this.txtHotKeys.Tag;
+                hotKey.RegKeys = (InputKey)this.txtRegKeys.Tag;
             }
-            if (this.txtSendKeys.Tag!=null)
+            if (this.txtSendKeys.Tag != null)
             {
-                hotKey.HotKeys = (InputKey)this.txtSendKeys.Tag;
+                hotKey.SendKeys = (InputKey)this.txtSendKeys.Tag;
             }
             hotKey.Note = this.txtNote.Text;
             return hotKey;
