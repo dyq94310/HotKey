@@ -164,8 +164,8 @@ namespace WorkUtil
             {
                 if (item.HotKeyId == hotkeyId)
                 {
-                    SendKeys.Send(item.SendKeys.Sends);
-                    loginfo.Info(string.Format("success:ID={0},note={1}", hotkeyId, item.Note));
+                    SendKeys.Send(item.SendKeys.Sends.ToLower());
+                    loginfo.Info(string.Format("success:ID={0},note={1},send={2}", hotkeyId, item.Note,item.SendKeys.Sends.ToLower()));
                     return;
                 }
             }
