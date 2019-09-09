@@ -51,6 +51,7 @@ namespace WorkUtil
             ControlUtil.setDgvNormal(dgv);
             ControlUtil.setDgvColumn(dgv, columns);
             dgv.DataSource = list;
+            timer1.Start();
         }
 
 
@@ -165,7 +166,7 @@ namespace WorkUtil
                 if (item.HotKeyId == hotkeyId)
                 {
                     SendKeys.Send(item.SendKeys.Sends.ToLower());
-                    loginfo.Info(string.Format("success:ID={0},note={1},send={2}", hotkeyId, item.Note,item.SendKeys.Sends.ToLower()));
+                    loginfo.Info(string.Format("success:ID={0},note={1},send={2}", hotkeyId, item.Note, item.SendKeys.Sends.ToLower()));
                     return;
                 }
             }
@@ -208,6 +209,65 @@ namespace WorkUtil
         {
             HotKey hotKey = list[this.dgv.CurrentRow.Index];
             updateHotKey(hotKey);
+        }
+
+        private void NotifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
+                this.notifyIcon1.Visible = false;
+            }
+        }
+
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                this.Hide();
+                this.notifyIcon1.Visible = true;
+                this.notifyIcon1.ShowBalloonTip(20, "最小化", "已经最小化", ToolTipIcon.Info);
+            }
+
+        }
+
+        private void OpenMainCms_Click(object sender, EventArgs e)
+        {
+            if (this.Visible)
+            {
+                this.Hide();
+            }
+            else
+            {
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
+            }
+
+        }
+
+        private void ExitCms_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private bool bTransparent;
+        private System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            if (this.bTransparent)
+            {
+                this.bTransparent = false;       //显示透明图标	     
+           //     this.notifyIcon1.Icon = (System.Drawing.Icon)resources.GetObject("IconNotifyTransp");
+            }
+            else
+            {
+                this.bTransparent = true;      //显示托盘图标	    
+             //   this.notifyIcon1.Icon = (System.Drawing.Icon)resources.GetObject("empy");
+            }
+
         }
     }
 }

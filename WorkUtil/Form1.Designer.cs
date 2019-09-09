@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.panel1 = new System.Windows.Forms.Panel();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -36,8 +37,10 @@
             this.button1 = new System.Windows.Forms.Button();
             this.dgv = new System.Windows.Forms.DataGridView();
             this.cms = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.修改ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.OpenMainCms = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExitCms = new System.Windows.Forms.ToolStripMenuItem();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.cms.SuspendLayout();
@@ -107,6 +110,7 @@
             this.dgv.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv.Location = new System.Drawing.Point(0, 43);
             this.dgv.Name = "dgv";
+            this.dgv.RowHeadersWidth = 62;
             this.dgv.RowTemplate.Height = 30;
             this.dgv.Size = new System.Drawing.Size(667, 254);
             this.dgv.TabIndex = 1;
@@ -117,22 +121,36 @@
             // 
             this.cms.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cms.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.修改ToolStripMenuItem,
-            this.删除ToolStripMenuItem});
+            this.OpenMainCms,
+            this.ExitCms});
             this.cms.Name = "cms";
-            this.cms.Size = new System.Drawing.Size(117, 60);
+            this.cms.Size = new System.Drawing.Size(171, 64);
             // 
-            // 修改ToolStripMenuItem
+            // notifyIcon1
             // 
-            this.修改ToolStripMenuItem.Name = "修改ToolStripMenuItem";
-            this.修改ToolStripMenuItem.Size = new System.Drawing.Size(116, 28);
-            this.修改ToolStripMenuItem.Text = "修改";
+            this.notifyIcon1.ContextMenuStrip = this.cms;
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "dog";
+            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon1_MouseDoubleClick);
             // 
-            // 删除ToolStripMenuItem
+            // OpenMainCms
             // 
-            this.删除ToolStripMenuItem.Name = "删除ToolStripMenuItem";
-            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(116, 28);
-            this.删除ToolStripMenuItem.Text = "删除";
+            this.OpenMainCms.Name = "OpenMainCms";
+            this.OpenMainCms.Size = new System.Drawing.Size(240, 30);
+            this.OpenMainCms.Text = "打开主页面";
+            this.OpenMainCms.Click += new System.EventHandler(this.OpenMainCms_Click);
+            // 
+            // ExitCms
+            // 
+            this.ExitCms.Name = "ExitCms";
+            this.ExitCms.Size = new System.Drawing.Size(240, 30);
+            this.ExitCms.Text = "退出";
+            this.ExitCms.Click += new System.EventHandler(this.ExitCms_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 500;
+            this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // Form1
             // 
@@ -144,6 +162,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();
@@ -159,10 +178,12 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.DataGridView dgv;
         private System.Windows.Forms.ContextMenuStrip cms;
-        private System.Windows.Forms.ToolStripMenuItem 修改ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 删除ToolStripMenuItem;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.ToolStripMenuItem OpenMainCms;
+        private System.Windows.Forms.ToolStripMenuItem ExitCms;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 
